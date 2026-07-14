@@ -49,8 +49,9 @@ export function isPerformanceMemory(value: unknown): value is PerformanceMemory 
     typeof item.memoryText === "string" &&
     item.memoryText.trim().length > 0 &&
     typeof item.isFavorite === "boolean" &&
-    (item.favoriteBottleStyle === null ||
-      FAVORITE_BOTTLE_STYLES.includes(item.favoriteBottleStyle)) &&
+   (item.favoriteBottleStyle === null ||
+     (typeof item.favoriteBottleStyle === "string" &&
+       FAVORITE_BOTTLE_STYLES.includes(item.favoriteBottleStyle))) &&
     typeof item.createdAt === "string" &&
     typeof item.updatedAt === "string"
   );
