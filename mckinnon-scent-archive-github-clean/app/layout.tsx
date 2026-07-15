@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "./playing-card-feature.css";
+import PlayingCardFeature from "./PlayingCardFeature";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mckinnon — A Scent Archive",
-  description: "A private Sleep No More performance memory archive, distilled into scent and glass.",
+  description:
+    "A private Sleep No More performance memory archive, distilled into scent and glass.",
   other: {
     "codex-preview": "development",
   },
@@ -35,6 +38,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <PlayingCardFeature />
       </body>
     </html>
   );
