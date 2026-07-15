@@ -1003,6 +1003,17 @@ export default function MckinnonArchive() {
     <main>
       <AnimatePresence>{!loaded && <motion.div className="threshold" exit={{ opacity: 0 }} transition={{ duration: 0.65 }}><div className="threshold-mask" /><p>MCKINNON / ACCESSING PRIVATE ARCHIVE</p><span><i /></span></motion.div>}</AnimatePresence>
       <nav className="site-nav" aria-label="Primary"><button className="wordmark" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>MCKINNON</button><div><button onClick={openIndex}>INDEX</button><button onClick={openAdd}>ADD <Plus size={14} /></button></div></nav>
+      {!detail && !distilling && !indexOpen && !collectionCandidate && (
+  <button
+    type="button"
+    className="quick-add-memory"
+    onClick={openAdd}
+    aria-label="Add a new performance memory"
+  >
+    <Plus size={18} weight="light" />
+    <span>ADD MEMORY</span>
+  </button>
+)}
       {storageError && <div className="storage-error" role="alert">{storageError}<button onClick={() => setStorageError("")} aria-label="Dismiss"><X size={15} /></button></div>}
       <MaskPortal count={memories.length} />
       <Cabinet memories={memories} onOpen={openDetail} onAdd={openAdd} onCollectDrop={openCollectionChooser} />
