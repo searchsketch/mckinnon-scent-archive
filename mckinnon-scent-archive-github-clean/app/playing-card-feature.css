@@ -570,3 +570,55 @@
     transition: none;
   }
 }
+
+/** Mobile full-deck layout hotfix **/
+@media (max-width: 620px) {
+  .mck-card-pile {
+    width: 100% !important;
+    height: 285px !important;
+    margin-top: 28px !important;
+    overflow: visible !important;
+  }
+
+  .mck-card-option {
+    top: 10px !important;
+    width: clamp(72px, 21vw, 84px) !important;
+    transform: rotate(var(--card-rotate)) !important;
+  }
+
+  .mck-card-option:nth-child(1),
+  .mck-card-option:nth-child(6) {
+    left: 0 !important;
+  }
+
+  .mck-card-option:nth-child(2),
+  .mck-card-option:nth-child(7) {
+    left: 18.5% !important;
+  }
+
+  .mck-card-option:nth-child(3),
+  .mck-card-option:nth-child(8) {
+    left: 37% !important;
+  }
+
+  .mck-card-option:nth-child(4),
+  .mck-card-option:nth-child(9) {
+    left: 55.5% !important;
+  }
+
+  .mck-card-option:nth-child(5),
+  .mck-card-option:nth-child(10) {
+    left: 74% !important;
+  }
+
+  .mck-card-option:nth-child(n + 6) {
+    top: 126px !important;
+  }
+
+  .mck-card-option:hover,
+  .mck-card-option:focus-visible,
+  .mck-card-option.is-selected {
+    z-index: 40 !important;
+    transform: translateY(-7px) rotate(0deg) scale(1.035) !important;
+  }
+}
