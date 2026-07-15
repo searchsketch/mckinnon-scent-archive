@@ -63,12 +63,36 @@ const COLLECTION_BOTTLES: Array<{
   name: string;
   image: string;
 }> = [
-  { id: "ivory-seal", name: "THE IVORY SEAL", image: "/assets/collection/option-1-ivory-seal.webp" },
-  { id: "raven", name: "THE RAVEN", image: "/assets/collection/option-2-raven.webp" },
-  { id: "serpent", name: "THE SERPENT", image: "/assets/collection/option-3-serpent.webp" },
-  { id: "stag", name: "THE STAG", image: "/assets/collection/option-4-stag.webp" },
-  { id: "moon", name: "THE MOON", image: "/assets/collection/option-5-moon.webp" },
-  { id: "white-mask", name: "THE WHITE MASK", image: "/assets/collection/option-6-white-mask.webp" },
+  {
+    id: "ivory-seal",
+    name: "THE IVORY SEAL",
+    image: "/assets/collection-v3/ivory-seal-cutout-v3.png",
+  },
+  {
+    id: "raven",
+    name: "THE RAVEN",
+    image: "/assets/collection-v3/raven-cutout-v3.png",
+  },
+  {
+    id: "serpent",
+    name: "THE SERPENT",
+    image: "/assets/collection-v3/serpent-cutout-v3.png",
+  },
+  {
+    id: "stag",
+    name: "THE STAG",
+    image: "/assets/collection-v3/stag-cutout-v3.png",
+  },
+  {
+    id: "moon",
+    name: "THE MOON",
+    image: "/assets/collection-v3/moon-cutout-v3.png",
+  },
+  {
+    id: "white-mask",
+    name: "THE WHITE MASK",
+    image: "/assets/collection-v3/white-mask-cutout-v3.png",
+  },
 ];
 
 const collectionBottle = (style: FavoriteBottleStyle | null) =>
