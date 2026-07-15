@@ -580,3 +580,186 @@
     height: 220px !important;
   }
 }
+
+/**
+ * COLLECTION VESSEL REFRESH
+ * Paste this block at the VERY END of app/real-wood-cabinet.css
+ * Purpose:
+ * 1) Use the new six bottle renders without cropping
+ * 2) Fix collection shelf bottle cut-off
+ * 3) Fix "Choose its final vessel" option thumbnails so every bottle is fully visible
+ */
+
+/* ---------- Top treasured shelf ---------- */
+
+.collection-rail {
+  min-height: 318px !important;
+  align-items: end !important;
+  padding: 8px 0 12px !important;
+  gap: clamp(6px, 0.9vw, 14px) !important;
+}
+
+.collection-item {
+  flex: 0 0 clamp(168px, 16vw, 216px) !important;
+  min-height: 314px !important;
+  grid-template-rows: 252px auto !important;
+  padding: 0 10px 14px !important;
+}
+
+.collection-image-wrap {
+  min-height: 252px !important;
+  padding: 0 6px 8px !important;
+  display: grid !important;
+  place-items: end center !important;
+  overflow: visible !important;
+}
+
+.collection-image-wrap::before {
+  bottom: 8px !important;
+  height: 10px !important;
+}
+
+.collection-image-wrap::after {
+  inset: 16% 2% -2% !important;
+  filter: blur(17px) !important;
+}
+
+.collection-image-wrap img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 248px !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  image-rendering: auto !important;
+  filter:
+    drop-shadow(0 18px 14px rgba(0, 0, 0, 0.72))
+    drop-shadow(0 0 18px rgba(221, 185, 150, 0.08)) !important;
+}
+
+.collection-item:hover img,
+.collection-item:focus-visible img {
+  transform: translateY(-4px) scale(1.03) !important;
+}
+
+.collection-item-copy {
+  padding-top: 10px !important;
+}
+
+/* ---------- Collection chooser / final vessel page ---------- */
+
+.collection-chooser-options {
+  align-items: stretch !important;
+}
+
+.collection-chooser-options > button {
+  min-height: clamp(276px, 35vh, 370px) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.chooser-bottle-image {
+  height: clamp(220px, 29vh, 314px) !important;
+  min-height: 220px !important;
+  padding: 14px 16px 8px !important;
+  display: grid !important;
+  place-items: end center !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(ellipse at 50% 72%, rgba(233, 215, 198, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,0.015), transparent 30%) !important;
+}
+
+.chooser-bottle-image img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  image-rendering: auto !important;
+  filter:
+    drop-shadow(0 14px 14px rgba(0, 0, 0, 0.72))
+    drop-shadow(0 0 18px rgba(228, 198, 171, 0.08)) !important;
+}
+
+/* Slightly more room for the tall antlers and mask */
+.collection-chooser-options > button:nth-child(4) .chooser-bottle-image img,
+.collection-chooser-options > button:nth-child(6) .chooser-bottle-image img {
+  max-height: 104% !important;
+}
+
+.collection-chooser-options > button span,
+.collection-chooser-options > button small,
+.collection-chooser-options > button em {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 900px) {
+  .collection-rail {
+    min-height: 286px !important;
+  }
+
+  .collection-item {
+    flex-basis: 154px !important;
+    min-height: 282px !important;
+    grid-template-rows: 224px auto !important;
+  }
+
+  .collection-image-wrap {
+    min-height: 224px !important;
+  }
+
+  .collection-image-wrap img {
+    max-height: 220px !important;
+  }
+
+  .collection-chooser-options > button {
+    min-height: 288px !important;
+  }
+
+  .chooser-bottle-image {
+    height: 226px !important;
+    min-height: 226px !important;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 560px) {
+  .collection-shelf {
+    min-height: 366px !important;
+  }
+
+  .collection-rail {
+    min-height: 262px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .collection-item {
+    flex-basis: 146px !important;
+    min-height: 256px !important;
+    grid-template-rows: 202px auto !important;
+    padding-inline: 8px !important;
+  }
+
+  .collection-image-wrap {
+    min-height: 202px !important;
+    padding-inline: 4px !important;
+  }
+
+  .collection-image-wrap img {
+    max-height: 196px !important;
+  }
+
+  .collection-chooser-options > button {
+    min-height: 250px !important;
+  }
+
+  .chooser-bottle-image {
+    height: 194px !important;
+    min-height: 194px !important;
+    padding: 10px 10px 6px !important;
+  }
+}
