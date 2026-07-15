@@ -66,32 +66,32 @@ const COLLECTION_BOTTLES: Array<{
   {
     id: "ivory-seal",
     name: "THE IVORY SEAL",
-    image: "/assets/collection-v3/ivory-seal-cutout-v3.png",
+    image: "/assets/collection-v4/ivory-seal-cutout-v4.png",
   },
   {
     id: "raven",
     name: "THE RAVEN",
-    image: "/assets/collection-v3/raven-cutout-v3.png",
+    image: "/assets/collection-v4/raven-cutout-v4.png",
   },
   {
     id: "serpent",
     name: "THE SERPENT",
-    image: "/assets/collection-v3/serpent-cutout-v3.png",
+    image: "/assets/collection-v4/serpent-cutout-v4.png",
   },
   {
     id: "stag",
     name: "THE STAG",
-    image: "/assets/collection-v3/stag-cutout-v3.png",
+    image: "/assets/collection-v4/stag-cutout-v4.png",
   },
   {
     id: "moon",
     name: "THE MOON",
-    image: "/assets/collection-v3/moon-cutout-v3.png",
+    image: "/assets/collection-v4/moon-cutout-v4.png",
   },
   {
     id: "white-mask",
     name: "THE WHITE MASK",
-    image: "/assets/collection-v3/white-mask-cutout-v3.png",
+    image: "/assets/collection-v4/white-mask-cutout-v4.png",
   },
 ];
 
