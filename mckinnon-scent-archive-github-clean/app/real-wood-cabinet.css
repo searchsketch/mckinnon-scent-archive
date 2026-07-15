@@ -1,0 +1,372 @@
+/**
+ * MCKINNON cabinet V2
+ * Real walnut image textures + transparent collection vessels.
+ * Imported after globals.css so this layer replaces the earlier CSS-painted cabinet.
+ */
+
+:root {
+  --mck-wood-frame-x: clamp(24px, 3.8vw, 54px);
+  --mck-wood-frame-y: clamp(52px, 6vw, 82px);
+  --mck-wood-cream: rgba(231, 214, 196, 0.78);
+}
+
+.cabinet-space {
+  min-height: 190vh;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(76, 43, 25, 0.14), transparent 46%),
+    radial-gradient(ellipse at 50% 78%, rgba(24, 14, 10, 0.26), transparent 52%),
+    #050505 !important;
+}
+
+/* Both sections use real photographed walnut components instead of CSS wood colours. */
+.collection-shelf,
+.cabinet-shell {
+  border: 0 !important;
+  background-color: #120c09 !important;
+  background-image:
+    url("/assets/cabinet/walnut-spotlight.png"),
+    url("/assets/cabinet/walnut-cornice.webp"),
+    url("/assets/cabinet/walnut-plinth.webp"),
+    url("/assets/cabinet/walnut-side.webp"),
+    url("/assets/cabinet/walnut-side.webp"),
+    url("/assets/cabinet/walnut-panel.webp") !important;
+  background-position:
+    50% 7%,
+    top center,
+    bottom center,
+    left center,
+    right center,
+    center !important;
+  background-size:
+    min(44%, 440px) auto,
+    100% var(--mck-wood-frame-y),
+    100% calc(var(--mck-wood-frame-y) * 0.9),
+    var(--mck-wood-frame-x) 100%,
+    var(--mck-wood-frame-x) 100%,
+    cover !important;
+  background-repeat: no-repeat !important;
+  box-shadow:
+    0 52px 110px rgba(0, 0, 0, 0.76),
+    0 0 0 1px rgba(107, 72, 50, 0.2),
+    inset 0 1px rgba(244, 224, 202, 0.035),
+    inset 0 -30px 60px rgba(0, 0, 0, 0.22) !important;
+}
+
+.collection-shelf {
+  width: min(92vw, 1280px);
+  min-height: 430px;
+  margin: -1vh auto 7vh !important;
+  padding: clamp(62px, 7vw, 88px) clamp(32px, 5vw, 70px) clamp(48px, 5vw, 66px);
+  overflow: visible;
+  isolation: isolate;
+}
+
+.collection-shelf::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 1 !important;
+  left: var(--mck-wood-frame-x) !important;
+  right: var(--mck-wood-frame-x) !important;
+  bottom: calc(var(--mck-wood-frame-y) * 0.76) !important;
+  height: clamp(16px, 1.8vw, 25px) !important;
+  background: url("/assets/cabinet/walnut-shelf.webp") center / 100% 100% no-repeat !important;
+  box-shadow:
+    0 13px 22px rgba(0, 0, 0, 0.7),
+    0 -1px rgba(226, 195, 164, 0.16) !important;
+  pointer-events: none;
+}
+
+.collection-header,
+.collection-rail {
+  position: relative;
+  z-index: 2;
+}
+
+.collection-header {
+  min-height: 58px;
+  padding: 0 0 14px !important;
+  border-bottom: 1px solid rgba(187, 145, 108, 0.18) !important;
+}
+
+.collection-header p {
+  color: rgba(208, 181, 156, 0.48) !important;
+}
+
+.collection-header h3 {
+  color: var(--mck-wood-cream) !important;
+}
+
+.collection-header > span {
+  color: rgba(194, 162, 136, 0.58) !important;
+}
+
+.collection-rail {
+  min-height: 278px !important;
+  padding: 4px 0 8px !important;
+  gap: clamp(2px, 0.6vw, 9px) !important;
+  scrollbar-color: rgba(150, 108, 78, 0.45) transparent;
+}
+
+.collection-item {
+  flex: 0 0 clamp(150px, 15vw, 190px) !important;
+  min-height: 276px !important;
+  grid-template-rows: 220px auto !important;
+  padding: 0 8px 12px !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+.collection-item:hover,
+.collection-item:focus-visible {
+  transform: translateY(-9px) scale(1.018) !important;
+  background: radial-gradient(ellipse at 50% 86%, color-mix(in srgb, var(--liquid) 8%, transparent), transparent 56%) !important;
+}
+
+.collection-image-wrap {
+  overflow: visible !important;
+  place-items: end center !important;
+}
+
+.collection-image-wrap::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 18%;
+  right: 18%;
+  bottom: 5px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(219, 181, 146, 0.36), rgba(87, 54, 34, 0.17) 44%, transparent 72%);
+  filter: blur(2px);
+  opacity: 0.72;
+}
+
+.collection-image-wrap::after {
+  inset: 18% 4% -3% !important;
+  background:
+    radial-gradient(ellipse at 50% 78%, color-mix(in srgb, var(--liquid) 13%, transparent), transparent 55%),
+    radial-gradient(ellipse at 50% 34%, rgba(255, 230, 199, 0.08), transparent 62%) !important;
+  filter: blur(15px) !important;
+}
+
+.collection-image-wrap img {
+  width: 100% !important;
+  height: 218px !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  filter:
+    drop-shadow(0 19px 12px rgba(0, 0, 0, 0.74))
+    drop-shadow(0 0 16px rgba(221, 185, 150, 0.08)) !important;
+  transform-origin: 50% 92%;
+  transition: transform 0.38s cubic-bezier(.22,1,.36,1), filter 0.32s !important;
+}
+
+.collection-item:hover img,
+.collection-item:focus-visible img {
+  transform: translateY(-4px) scale(1.035);
+  filter:
+    drop-shadow(0 25px 16px rgba(0, 0, 0, 0.76))
+    drop-shadow(0 0 22px rgba(224, 190, 157, 0.13)) !important;
+}
+
+.collection-item-copy {
+  border-top: 1px solid rgba(183, 136, 101, 0.12);
+  padding-top: 9px;
+}
+
+.collection-item-copy small,
+.collection-item-copy em {
+  color: rgba(214, 190, 168, 0.48) !important;
+}
+
+.collection-empty {
+  color: rgba(207, 180, 155, 0.62) !important;
+}
+
+/* Existing drag overlay remains fully functional above the wood skin. */
+.collection-shelf.is-drag-active::before {
+  z-index: 20 !important;
+  inset: var(--mck-wood-frame-y) var(--mck-wood-frame-x) calc(var(--mck-wood-frame-y) * 0.8) !important;
+  background: rgba(10, 7, 5, 0.68) !important;
+  color: rgba(236, 218, 199, 0.72) !important;
+}
+
+.collection-shelf.is-drag-over {
+  box-shadow:
+    0 52px 110px rgba(0, 0, 0, 0.76),
+    0 0 0 1px rgba(214, 177, 143, 0.42),
+    inset 0 0 70px rgba(201, 160, 124, 0.08) !important;
+}
+
+.cabinet-shell {
+  width: min(92vw, 1280px);
+  min-height: 900px !important;
+  margin: 0 auto !important;
+  padding: clamp(58px, 5vw, 76px) clamp(42px, 5vw, 68px) clamp(68px, 6vw, 86px) !important;
+  transform-style: preserve-3d;
+  transform-origin: center top;
+}
+
+.cabinet-topline {
+  inset: 27px clamp(40px, 5vw, 68px) auto !important;
+  color: rgba(204, 173, 145, 0.44) !important;
+}
+
+.cabinet-door {
+  inset: clamp(48px, 4.8vw, 70px) !important;
+  z-index: 5 !important;
+  border-color: rgba(211, 181, 154, 0.1) !important;
+  background: linear-gradient(108deg, rgba(255,255,255,.028), transparent 31%, transparent 70%, rgba(255,255,255,.018)) !important;
+  box-shadow: inset 12px 0 26px rgba(255,255,255,.018) !important;
+  backdrop-filter: blur(0.25px) !important;
+}
+
+.cabinet-interior {
+  min-height: 760px !important;
+  overflow: hidden;
+  border: 0 !important;
+  background:
+    radial-gradient(ellipse at 50% 32%, rgba(122, 76, 45, 0.08), transparent 50%),
+    linear-gradient(rgba(7, 5, 4, 0.12), rgba(7, 5, 4, 0.28)),
+    url("/assets/cabinet/walnut-panel-lower.webp") center / cover no-repeat !important;
+  box-shadow:
+    inset 30px 0 46px rgba(0, 0, 0, 0.55),
+    inset -30px 0 46px rgba(0, 0, 0, 0.55),
+    inset 0 22px 38px rgba(0, 0, 0, 0.24) !important;
+}
+
+.cabinet-interior::before {
+  background:
+    radial-gradient(ellipse at 50% 15%, rgba(244, 211, 177, 0.055), transparent 38%),
+    linear-gradient(90deg, rgba(0,0,0,.18), transparent 13%, transparent 87%, rgba(0,0,0,.18)) !important;
+}
+
+.shelf-line {
+  z-index: 4 !important;
+  height: clamp(17px, 1.7vw, 24px) !important;
+  background: url("/assets/cabinet/walnut-shelf.webp") center / 100% 100% no-repeat !important;
+  border: 0 !important;
+  box-shadow:
+    0 13px 22px rgba(0, 0, 0, 0.72),
+    0 -1px rgba(229, 193, 158, 0.13) !important;
+}
+
+.shelf-line::before {
+  top: 84% !important;
+  height: 30px !important;
+  background: linear-gradient(rgba(28, 15, 10, 0.3), transparent) !important;
+}
+
+.shelf-light {
+  inset: 1px 7% auto !important;
+  opacity: 0.38 !important;
+  background: linear-gradient(90deg, transparent, rgba(224, 191, 158, 0.32), rgba(250, 229, 207, 0.54), rgba(224, 191, 158, 0.3), transparent) !important;
+}
+
+.bottle-grid {
+  min-height: 760px !important;
+  grid-auto-rows: 253px !important;
+  padding: 0 4.5% !important;
+}
+
+.bottle {
+  filter:
+    drop-shadow(0 22px 22px rgba(0,0,0,.72))
+    drop-shadow(0 0 10px rgba(226, 193, 163, .055)) !important;
+}
+
+.empty-whisper {
+  color: rgba(201, 172, 145, 0.55) !important;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --mck-wood-frame-x: 24px;
+    --mck-wood-frame-y: 48px;
+  }
+
+  .cabinet-space {
+    padding-inline: 14px !important;
+  }
+
+  .collection-shelf {
+    width: 100% !important;
+    min-height: 370px;
+    padding: 54px 24px 45px !important;
+    margin-bottom: 38px !important;
+  }
+
+  .collection-header {
+    min-height: 54px;
+  }
+
+  .collection-rail {
+    min-height: 242px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .collection-item {
+    flex-basis: 142px !important;
+    min-height: 238px !important;
+    grid-template-rows: 188px auto !important;
+  }
+
+  .collection-image-wrap img {
+    height: 184px !important;
+  }
+
+  .cabinet-shell {
+    width: 100% !important;
+    min-height: 780px !important;
+    padding: 48px 25px 56px !important;
+  }
+
+  .cabinet-topline {
+    inset: 21px 27px auto !important;
+  }
+
+  .cabinet-door {
+    inset: 39px 25px 47px !important;
+  }
+
+  .cabinet-interior,
+  .bottle-grid {
+    min-height: 676px !important;
+  }
+
+  .bottle-grid {
+    grid-template-columns: repeat(3, minmax(82px, 1fr)) !important;
+    grid-auto-rows: 225px !important;
+    padding-inline: 2% !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .collection-shelf {
+    min-height: 344px;
+    padding-inline: 18px !important;
+  }
+
+  .collection-header > span {
+    display: none;
+  }
+
+  .collection-item {
+    flex-basis: 130px !important;
+  }
+
+  .cabinet-shell {
+    padding-inline: 20px !important;
+  }
+
+  .bottle-grid {
+    grid-template-columns: repeat(2, minmax(92px, 1fr)) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collection-item,
+  .collection-image-wrap img {
+    transition: none !important;
+  }
+}

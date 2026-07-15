@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./playing-card-feature.css";
+import "./real-wood-cabinet.css";
+import "./archive-pagination-feature.css";
 import PlayingCardFeature from "./PlayingCardFeature";
+import ArchivePaginationFeature from "./ArchivePaginationFeature";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +42,7 @@ export default function RootLayout({
       >
         {children}
         <PlayingCardFeature />
+        <ArchivePaginationFeature />
       </body>
     </html>
   );

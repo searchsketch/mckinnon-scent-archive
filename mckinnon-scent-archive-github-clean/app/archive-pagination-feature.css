@@ -1,0 +1,205 @@
+/**
+ * Fixed-height archive pagination.
+ * Desktop: 5 columns × 3 rows = 15 memories.
+ * Tablet: 3 columns × 3 rows = 9 memories.
+ * Mobile: 2 columns × 3 rows = 6 memories.
+ */
+
+.has-archive-pagination .cabinet-shell {
+  scroll-margin-top: 28px;
+}
+
+.has-archive-pagination .bottle-button[hidden] {
+  display: none !important;
+}
+
+.has-archive-pagination .bottle-grid {
+  align-content: start;
+}
+
+.archive-mode-desktop .bottle-grid {
+  grid-template-columns: repeat(5, minmax(100px, 1fr)) !important;
+  grid-template-rows: repeat(3, 253px) !important;
+  grid-auto-rows: 253px !important;
+}
+
+.archive-mode-tablet .bottle-grid {
+  grid-template-columns: repeat(3, minmax(82px, 1fr)) !important;
+  grid-template-rows: repeat(3, 225px) !important;
+  grid-auto-rows: 225px !important;
+}
+
+.archive-mode-mobile .bottle-grid {
+  grid-template-columns: repeat(2, minmax(92px, 1fr)) !important;
+  grid-template-rows: repeat(3, 225px) !important;
+  grid-auto-rows: 225px !important;
+}
+
+.archive-page-item.is-page-visible {
+  animation: archive-page-enter 0.48s cubic-bezier(.22, 1, .36, 1) both;
+  animation-delay: calc(var(--archive-item-order, 0) * 24ms);
+}
+
+@keyframes archive-page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+.archive-pagination {
+  position: relative;
+  z-index: 6;
+  width: min(92vw, 1280px);
+  min-height: 72px;
+  margin: 18px auto 0;
+  display: grid;
+  grid-template-columns: minmax(128px, auto) 1fr minmax(108px, auto) minmax(190px, auto);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(177, 132, 97, 0.24);
+  color: rgba(229, 211, 194, 0.72);
+}
+
+.archive-pagination::before {
+  content: "";
+  position: absolute;
+  inset: -8px 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(222, 188, 156, 0.22),
+    transparent
+  );
+}
+
+.archive-pagination-button {
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(183, 140, 105, 0.22);
+  border-radius: 2px;
+  background: rgba(10, 7, 5, 0.46);
+  color: rgba(228, 210, 192, 0.66);
+  font:
+    8px/1 var(--font-geist-mono),
+    monospace;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition:
+    border-color 0.24s,
+    color 0.24s,
+    background 0.24s,
+    opacity 0.24s;
+}
+
+.archive-pagination-button:hover:not(:disabled),
+.archive-pagination-button:focus-visible:not(:disabled) {
+  border-color: rgba(221, 185, 151, 0.5);
+  background: rgba(39, 25, 17, 0.6);
+  color: rgba(242, 226, 210, 0.94);
+  outline: none;
+}
+
+.archive-pagination-button:disabled {
+  opacity: 0.24;
+  cursor: not-allowed;
+}
+
+.archive-pagination-add {
+  background: rgba(230, 216, 201, 0.92);
+  color: #130d09;
+  border-color: rgba(238, 222, 207, 0.7);
+}
+
+.archive-pagination-add:hover,
+.archive-pagination-add:focus-visible {
+  background: transparent !important;
+  color: rgba(240, 224, 207, 0.96) !important;
+}
+
+.archive-pagination-status {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.archive-pagination-page,
+.archive-pagination-range {
+  font-family: var(--font-geist-mono), monospace;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+}
+
+.archive-pagination-page {
+  color: rgba(235, 217, 199, 0.84);
+  font-size: 9px;
+}
+
+.archive-pagination-range {
+  color: rgba(181, 150, 125, 0.58);
+  font-size: 7px;
+}
+
+@media (max-width: 900px) {
+  .archive-pagination {
+    width: 100%;
+    grid-template-columns: minmax(100px, 1fr) minmax(120px, 1.3fr) minmax(90px, 1fr);
+    padding-inline: 0;
+  }
+
+  .archive-pagination-add {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .archive-pagination {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .archive-pagination-status {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 8px 0 4px;
+  }
+
+  .archive-pagination-previous {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .archive-pagination-next {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .archive-pagination-add {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  .archive-pagination-button {
+    min-height: 44px;
+    padding-inline: 8px;
+    font-size: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archive-page-item.is-page-visible {
+    animation: none;
+  }
+}
