@@ -763,3 +763,139 @@
     padding: 10px 10px 6px !important;
   }
 }
+
+/* ===== Collection vessel full-view fix ===== */
+
+/* 1) 收藏架上的瓶子：完整显示，不裁切 */
+.collection-item {
+  min-height: 320px !important;
+  grid-template-rows: 262px auto !important;
+}
+
+.collection-image-wrap {
+  min-height: 262px !important;
+  display: grid !important;
+  place-items: end center !important;
+  overflow: visible !important;
+  padding: 8px 8px 10px !important;
+}
+
+.collection-image-wrap img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 248px !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  display: block !important;
+}
+
+/* 2) “CHOOSE ITS FINAL VESSEL” 六个选项：显示完整瓶身 */
+.collection-chooser-options {
+  align-items: stretch !important;
+}
+
+.collection-chooser-options > button {
+  min-height: 340px !important;
+  overflow: hidden !important;
+}
+
+.chooser-bottle-image {
+  height: 280px !important;
+  min-height: 280px !important;
+  display: grid !important;
+  place-items: end center !important;
+  overflow: visible !important;
+  padding: 18px 18px 10px !important;
+}
+
+.chooser-bottle-image img {
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: center bottom !important;
+  display: block !important;
+}
+
+/* 3) 这几个特别高的瓶子，再额外给一点空间 */
+.collection-chooser-options > button:nth-child(4) .chooser-bottle-image,
+.collection-chooser-options > button:nth-child(5) .chooser-bottle-image,
+.collection-chooser-options > button:nth-child(6) .chooser-bottle-image {
+  height: 300px !important;
+  min-height: 300px !important;
+}
+
+.collection-chooser-options > button:nth-child(4) .chooser-bottle-image img,
+.collection-chooser-options > button:nth-child(5) .chooser-bottle-image img,
+.collection-chooser-options > button:nth-child(6) .chooser-bottle-image img {
+  max-height: 100% !important;
+}
+
+/* 4) 平板 */
+@media (max-width: 900px) {
+  .collection-item {
+    min-height: 290px !important;
+    grid-template-rows: 228px auto !important;
+  }
+
+  .collection-image-wrap {
+    min-height: 228px !important;
+  }
+
+  .collection-image-wrap img {
+    max-height: 214px !important;
+  }
+
+  .collection-chooser-options > button {
+    min-height: 300px !important;
+  }
+
+  .chooser-bottle-image {
+    height: 236px !important;
+    min-height: 236px !important;
+    padding: 14px 14px 8px !important;
+  }
+
+  .collection-chooser-options > button:nth-child(4) .chooser-bottle-image,
+  .collection-chooser-options > button:nth-child(5) .chooser-bottle-image,
+  .collection-chooser-options > button:nth-child(6) .chooser-bottle-image {
+    height: 252px !important;
+    min-height: 252px !important;
+  }
+}
+
+/* 5) 手机 */
+@media (max-width: 560px) {
+  .collection-item {
+    min-height: 258px !important;
+    grid-template-rows: 198px auto !important;
+  }
+
+  .collection-image-wrap {
+    min-height: 198px !important;
+    padding: 6px 6px 8px !important;
+  }
+
+  .collection-image-wrap img {
+    max-height: 186px !important;
+  }
+
+  .collection-chooser-options > button {
+    min-height: 250px !important;
+  }
+
+  .chooser-bottle-image {
+    height: 194px !important;
+    min-height: 194px !important;
+    padding: 10px 10px 6px !important;
+  }
+
+  .collection-chooser-options > button:nth-child(4) .chooser-bottle-image,
+  .collection-chooser-options > button:nth-child(5) .chooser-bottle-image,
+  .collection-chooser-options > button:nth-child(6) .chooser-bottle-image {
+    height: 208px !important;
+    min-height: 208px !important;
+  }
+}
