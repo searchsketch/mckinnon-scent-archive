@@ -129,9 +129,39 @@ const initials = (name: string) =>
     .slice(0, 3)
     .toUpperCase();
 
+type MaskLipSticker = {
+  id: string;
+  x: number;
+  y: number;
+  rotation: number;
+  scale: number;
+};
+
+const MASK_LIPS_STORAGE_KEY = "mckinnon-mask-lips-v1";
+const MAX_MASK_LIPS = 10;
+const clamp = (value: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, value));
+
+const isMaskLipSticker = (value: unknown): value is MaskLipSticker => {
+  if (!value || typeof value !== "object") return false;
+  const sticker = value as Partial<MaskLipSticker>;
+  return (
+    typeof sticker.id === "string" &&
+    typeof sticker.x === "number" &&
+    Number.isFinite(sticker.x) &&
+    typeof sticker.y === "number" &&
+    Number.isFinite(sticker.y) &&
+    typeof sticker.rotation === "number" &&
+    Number.isFinite(sticker.rotation) &&
+    typeof sticker.scale === "number" &&
+    Number.isFinite(sticker.scale)
+  );
+};
+
 function MaskPortal({ count }: { count: number }) {
   const root = useRef<HTMLElement>(null);
   const mask = useRef<HTMLDivElement>(null);
+  const lipLayer = useRef<HTMLDivElement>(null);
   const front = useRef<HTMLImageElement>(null);
   const left = useRef<HTMLImageElement>(null);
   const right = useRef<HTMLImageElement>(null);
@@ -141,6 +171,25 @@ function MaskPortal({ count }: { count: number }) {
   const angle = useRef(0);
   const velocity = useRef(0);
   const raf = useRef<number | null>(null);
+  const lipDrag = useRef<{
+    id: string;
+    mode: "move" | "transform";
+    startX: number;
+    startY: number;
+    originX: number;
+    originY: number;
+    originScale: number;
+    originRotation: number;
+    centerX: number;
+    centerY: number;
+    startDistance: number;
+    startAngle: number;
+  } | null>(null);
+  const [sourceGhost, setSourceGhost] = useState<{ x: number; y: number } | null>(null);
+  const [lipStickers, setLipStickers] = useState<MaskLipSticker[]>([]);
+  const [selectedLipId, setSelectedLipId] = useState<string | null>(null);
+  const [lipStorageReady, setLipStorageReady] = useState(false);
+  const [lipStatus, setLipStatus] = useState("");
   const reducedMotion = useReducedMotion();
 
   const paint = useCallback(() => {
@@ -148,10 +197,190 @@ function MaskPortal({ count }: { count: number }) {
     if (!mask.current || !front.current || !left.current || !right.current) return;
     mask.current.style.setProperty("--mask-turn", `${a * 0.28}deg`);
     mask.current.style.setProperty("--mask-shift", `${a * 0.16}px`);
-    front.current.style.opacity = String(1 - Math.min(1, Math.abs(a) / 28));
+    const frontOpacity = 1 - Math.min(1, Math.abs(a) / 28);
+    front.current.style.opacity = String(frontOpacity);
+    if (lipLayer.current) {
+      lipLayer.current.style.opacity = String(frontOpacity);
+      lipLayer.current.classList.toggle("is-hidden", frontOpacity <= 0.55);
+    }
     left.current.style.opacity = String(a < 0 ? Math.min(1, -a / 26) : 0);
     right.current.style.opacity = String(a > 0 ? Math.min(1, a / 26) : 0);
   }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      try {
+        const stored = window.localStorage.getItem(MASK_LIPS_STORAGE_KEY);
+        if (stored) {
+          const parsed: unknown = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            setLipStickers(
+              parsed.filter(isMaskLipSticker).slice(0, MAX_MASK_LIPS).map((sticker) => ({
+                ...sticker,
+                x: clamp(sticker.x, 18, 82),
+                y: clamp(sticker.y, 20, 83),
+                rotation: clamp(sticker.rotation, -180, 180),
+                scale: clamp(sticker.scale, 0.65, 1.8),
+              })),
+            );
+          }
+        }
+      } catch {
+        window.localStorage.removeItem(MASK_LIPS_STORAGE_KEY);
+      } finally {
+        setLipStorageReady(true);
+      }
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!lipStorageReady) return;
+    try {
+      window.localStorage.setItem(MASK_LIPS_STORAGE_KEY, JSON.stringify(lipStickers));
+    } catch {
+      // The DIY controls remain usable when storage is unavailable.
+    }
+  }, [lipStickers, lipStorageReady]);
+
+  const updateLip = (id: string, update: (sticker: MaskLipSticker) => MaskLipSticker) => {
+    setLipStickers((current) =>
+      current.map((sticker) => (sticker.id === id ? update(sticker) : sticker)),
+    );
+  };
+
+  const addLipAt = (clientX: number, clientY: number) => {
+    if (lipStickers.length >= MAX_MASK_LIPS) {
+      return;
+    }
+    const bounds = mask.current?.getBoundingClientRect();
+    if (!bounds) return;
+    const insideMask =
+      clientX >= bounds.left &&
+      clientX <= bounds.right &&
+      clientY >= bounds.top &&
+      clientY <= bounds.bottom;
+    if (!insideMask) {
+      setLipStatus("Drag the kiss mark onto the mask.");
+      return;
+    }
+    const id = crypto.randomUUID();
+    const next: MaskLipSticker = {
+      id,
+      x: clamp(((clientX - bounds.left) / bounds.width) * 100, 18, 82),
+      y: clamp(((clientY - bounds.top) / bounds.height) * 100, 20, 83),
+      rotation: 0,
+      scale: 1,
+    };
+    setLipStickers((current) => [...current, next]);
+    setSelectedLipId(id);
+    setLipStatus("Kiss mark placed on the mask.");
+  };
+
+  const removeLip = (id: string) => {
+    setLipStickers((current) => current.filter((sticker) => sticker.id !== id));
+    setSelectedLipId(null);
+    setLipStatus("Kiss mark removed.");
+  };
+
+  const onLipPointerDown = (
+    event: React.PointerEvent<HTMLButtonElement>,
+    sticker: MaskLipSticker,
+  ) => {
+    event.stopPropagation();
+    setSelectedLipId(sticker.id);
+    lipDrag.current = {
+      id: sticker.id,
+      mode: "move",
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: sticker.x,
+      originY: sticker.y,
+      originScale: sticker.scale,
+      originRotation: sticker.rotation,
+      centerX: 0,
+      centerY: 0,
+      startDistance: 0,
+      startAngle: 0,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const onLipPointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    const drag = lipDrag.current;
+    if (!drag || !mask.current) return;
+    if (drag.mode === "move") {
+      const bounds = mask.current.getBoundingClientRect();
+      const x = clamp(drag.originX + ((event.clientX - drag.startX) / bounds.width) * 100, 18, 82);
+      const y = clamp(drag.originY + ((event.clientY - drag.startY) / bounds.height) * 100, 20, 83);
+      updateLip(drag.id, (sticker) => ({ ...sticker, x, y }));
+      return;
+    }
+    const distance = Math.hypot(event.clientX - drag.centerX, event.clientY - drag.centerY);
+    const pointerAngle = Math.atan2(event.clientY - drag.centerY, event.clientX - drag.centerX);
+    updateLip(drag.id, (sticker) => ({
+      ...sticker,
+      scale: clamp(drag.originScale * (distance / drag.startDistance), 0.65, 1.8),
+      rotation: drag.originRotation + ((pointerAngle - drag.startAngle) * 180) / Math.PI,
+    }));
+  };
+
+  const onLipPointerUp = (event: React.PointerEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (lipDrag.current) setLipStatus("Kiss mark placed.");
+    lipDrag.current = null;
+  };
+
+  const onLipTransformPointerDown = (
+    event: React.PointerEvent<HTMLSpanElement>,
+    sticker: MaskLipSticker,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!mask.current) return;
+    const bounds = mask.current.getBoundingClientRect();
+    const centerX = bounds.left + (sticker.x / 100) * bounds.width;
+    const centerY = bounds.top + (sticker.y / 100) * bounds.height;
+    lipDrag.current = {
+      id: sticker.id,
+      mode: "transform",
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: sticker.x,
+      originY: sticker.y,
+      originScale: sticker.scale,
+      originRotation: sticker.rotation,
+      centerX,
+      centerY,
+      startDistance: Math.max(12, Math.hypot(event.clientX - centerX, event.clientY - centerY)),
+      startAngle: Math.atan2(event.clientY - centerY, event.clientX - centerX),
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const onSourcePointerDown = (event: React.PointerEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (lipStickers.length >= MAX_MASK_LIPS) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setSourceGhost({ x: event.clientX, y: event.clientY });
+  };
+
+  const onSourcePointerMove = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!sourceGhost) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setSourceGhost({ x: event.clientX, y: event.clientY });
+  };
+
+  const onSourcePointerUp = (event: React.PointerEvent<HTMLButtonElement>) => {
+    if (!sourceGhost) return;
+    event.preventDefault();
+    event.stopPropagation();
+    setSourceGhost(null);
+    addLipAt(event.clientX, event.clientY);
+  };
 
   useEffect(() => {
     angle.current = -18;
@@ -249,14 +478,92 @@ function MaskPortal({ count }: { count: number }) {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
-          role="img"
-          aria-label="Interactive porcelain mask based on the provided Mckinnon reference; drag horizontally for a limited multi-angle view"
+          role="group"
+          aria-label="Interactive porcelain mask. Drag horizontally to turn it, or decorate it with movable kiss marks."
           tabIndex={0}
         >
           <img ref={front} className="mask-view mask-front" src="/assets/mask-front-clean-v2.png" alt="" draggable={false} />
           <img ref={left} className="mask-view mask-left" src="/assets/mask-left-clean-v2.png" alt="" draggable={false} />
           <img ref={right} className="mask-view mask-right" src="/assets/mask-right-clean-v2.png" alt="" draggable={false} />
+          <div ref={lipLayer} className="mask-lip-layer">
+            {lipStickers.map((sticker) => (
+              <button
+                key={sticker.id}
+                type="button"
+                className={`mask-lip-sticker ${selectedLipId === sticker.id ? "is-selected" : ""}`}
+                style={
+                  {
+                    "--lip-x": `${sticker.x}%`,
+                    "--lip-y": `${sticker.y}%`,
+                    "--lip-rotation": `${sticker.rotation}deg`,
+                    "--lip-scale": sticker.scale,
+                  } as CSSProperties
+                }
+                aria-label="Movable kiss mark. Use arrow keys to reposition it, or Delete to remove it."
+                onPointerDown={(event) => onLipPointerDown(event, sticker)}
+                onPointerMove={onLipPointerMove}
+                onPointerUp={onLipPointerUp}
+                onPointerCancel={onLipPointerUp}
+                onClick={(event) => event.stopPropagation()}
+                onDoubleClick={(event) => {
+                  event.stopPropagation();
+                  removeLip(sticker.id);
+                }}
+                onKeyDown={(event) => {
+                  const step = event.shiftKey ? 4 : 1;
+                  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Delete", "Backspace"].includes(event.key)) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                  }
+                  if (event.key === "ArrowLeft") updateLip(sticker.id, (item) => ({ ...item, x: clamp(item.x - step, 18, 82) }));
+                  if (event.key === "ArrowRight") updateLip(sticker.id, (item) => ({ ...item, x: clamp(item.x + step, 18, 82) }));
+                  if (event.key === "ArrowUp") updateLip(sticker.id, (item) => ({ ...item, y: clamp(item.y - step, 20, 83) }));
+                  if (event.key === "ArrowDown") updateLip(sticker.id, (item) => ({ ...item, y: clamp(item.y + step, 20, 83) }));
+                  if (event.key === "Delete" || event.key === "Backspace") removeLip(sticker.id);
+                }}
+              >
+                <img src="/assets/mask-kiss-sticker.png" alt="" draggable={false} />
+                {selectedLipId === sticker.id && (
+                  <span
+                    className="mask-lip-transform-handle"
+                    aria-hidden="true"
+                    onPointerDown={(event) => onLipTransformPointerDown(event, sticker)}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
+        {lipStickers.length < MAX_MASK_LIPS && (
+          <button
+            type="button"
+            className="mask-kiss-source portal-copy"
+            aria-label="Drag a kiss mark onto the mask"
+            onPointerDown={onSourcePointerDown}
+            onPointerMove={onSourcePointerMove}
+            onPointerUp={onSourcePointerUp}
+            onPointerCancel={() => setSourceGhost(null)}
+            onKeyDown={(event) => {
+              if ((event.key === "Enter" || event.key === " ") && mask.current) {
+                event.preventDefault();
+                const bounds = mask.current.getBoundingClientRect();
+                addLipAt(bounds.left + bounds.width * 0.62, bounds.top + bounds.height * 0.64);
+              }
+            }}
+          >
+            <img src="/assets/mask-kiss-sticker.png" alt="" draggable={false} />
+          </button>
+        )}
+        {sourceGhost && (
+          <img
+            className="mask-kiss-drag-ghost"
+            src="/assets/mask-kiss-sticker.png"
+            alt=""
+            draggable={false}
+            style={{ left: sourceGhost.x, top: sourceGhost.y }}
+          />
+        )}
+        <p className="sr-only" aria-live="polite">{lipStatus}</p>
         <span ref={hint} className="drag-hint portal-copy">DRAG TO TURN</span>
         <div className="portal-copy portal-bottom-left">
           <span>A SCENT ARCHIVE</span>
