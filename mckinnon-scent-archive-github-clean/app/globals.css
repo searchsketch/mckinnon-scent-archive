@@ -116,29 +116,42 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   border: 1px dashed rgba(30, 32, 32, .72);
   opacity: 0;
   transform: rotate(calc(var(--lip-rotation) * -1));
-  transition: opacity .18s;
+  transition: none;
 }
-.mask-lip-sticker:hover::after,
-.mask-lip-sticker:focus-visible::after,
-.mask-lip-sticker.is-selected::after { opacity: 1; }
+.mask-lip-sticker:active::after,
+.mask-lip-sticker.is-dragging::after { opacity: 1; }
 .mask-lip-layer.is-hidden .mask-lip-sticker { pointer-events: none; }
 .mask-lip-transform-handle {
   position: absolute;
   z-index: 4;
-  right: -19px;
-  bottom: -19px;
-  width: 34px;
-  height: 34px;
+  right: -18px;
+  bottom: -18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   cursor: nwse-resize;
-  pointer-events: auto;
+  opacity: 0;
+  pointer-events: none;
   touch-action: none;
+  transition: opacity 0s;
+}
+.mask-lip-sticker:active .mask-lip-transform-handle,
+.mask-lip-sticker.is-dragging .mask-lip-transform-handle {
+  opacity: 1;
+  pointer-events: auto;
+}
+@media (hover: hover) and (pointer: fine) {
+  .mask-lip-sticker:hover::after { opacity: 1; }
+  .mask-lip-sticker:hover .mask-lip-transform-handle {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 .mask-lip-transform-handle::after {
   content: "";
   position: absolute;
-  right: 9px;
-  bottom: 9px;
+  right: 4px;
+  bottom: 4px;
   width: 7px;
   height: 7px;
   border: 1px solid rgba(30, 32, 32, .86);
@@ -171,6 +184,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   pointer-events: none;
   user-select: none;
 }
+
 .mask-kiss-drag-ghost {
   position: fixed;
   z-index: 20;
