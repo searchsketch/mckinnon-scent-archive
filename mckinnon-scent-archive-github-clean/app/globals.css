@@ -168,13 +168,13 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   padding: 7px;
   border: 0;
   background: none;
-  opacity: .60;
+  opacity: .90;
   cursor: grab;
   touch-action: none;
   transition: opacity .25s, transform .25s;
 }
 .mask-kiss-source:hover,
-.mask-kiss-source:focus-visible { opacity: .52; transform: scale(1.04); }
+.mask-kiss-source:focus-visible { opacity: .95; transform: scale(1.04); }
 .mask-kiss-source:active { cursor: grabbing; opacity: .12; }
 .mask-kiss-source img,
 .mask-kiss-drag-ghost {
