@@ -204,7 +204,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
 .portal-bottom-left { left: 3vw; }
 .portal-bottom-right { right: 3vw; gap: 38px; }
 .portal-rule { width: 44px; height: 1px; background: rgba(255,255,255,.25); }
-.eye-aperture { position: absolute; inset: 0; z-index: 6; background: #020202; opacity: 0; will-change: clip-path; }
+.eye-aperture { position: absolute; inset: 0; z-index: 6; background: #020202; opacity: 0; pointer-events: none; will-change: clip-path; }
 .portal-blackout { position: absolute; inset: 0; z-index: 7; background: #020202; opacity: 0; pointer-events: none; }
 .cabinet-glint {
   position: absolute; inset: 0; z-index: 8; opacity: 0; pointer-events: none;
