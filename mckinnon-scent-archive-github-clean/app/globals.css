@@ -168,7 +168,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible {
   padding: 7px;
   border: 0;
   background: none;
-  opacity: .28;
+  opacity: .60;
   cursor: grab;
   touch-action: none;
   transition: opacity .25s, transform .25s;
